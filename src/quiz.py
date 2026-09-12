@@ -1,3 +1,6 @@
+import random
+
+
 class Quiz:
     def __init__(self, questions):
         self.questions = questions
@@ -29,6 +32,8 @@ class Quiz:
             print("Correct answer:", question["answer"])
 
     def start(self):
+        random.shuffle(self.questions)
+
         for question in self.questions:
             self.display_question(question)
 
