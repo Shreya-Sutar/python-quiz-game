@@ -115,8 +115,11 @@ class Quiz:
                 f"Invalid choice. Please enter a number from 1 to {total_available}."
             )
 
-    def display_question(self, question):
-        print("\nCategory:", question["category"])
+    def display_question(self, question, question_number, total_questions):
+        print("\n--------------------------------")
+        print(f"Question {question_number} of {total_questions}")
+        print("--------------------------------")
+        print("Category:", question["category"])
         print("Difficulty:", question["difficulty"])
         print(question["question"])
 
@@ -151,14 +154,22 @@ class Quiz:
 
         selected_questions = self.choose_question_count(selected_questions)
 
-        for question in selected_questions:
-            self.display_question(question)
+        total_questions = len(selected_questions)
+
+        for question_number, question in enumerate(
+            selected_questions, start=1
+        ):
+            self.display_question(
+                question,
+                question_number,
+                total_questions
+            )
 
             answer = self.get_answer()
 
             self.check_answer(question, answer)
 
-        self.show_result(len(selected_questions))
+        self.show_result(total_questions)
 
     def show_result(self, total_questions):
         wrong_answers = total_questions - self.score
