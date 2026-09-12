@@ -163,8 +163,16 @@ class Quiz:
                     print(key)
                     return int(key)
 
-                print("\nInvalid choice. Please enter a number from 1 to 4.")
-                print("Enter your answer (1-4): ", end="", flush=True)
+                print(
+                    "\nInvalid choice. "
+                    "Please enter a number from 1 to 4."
+                )
+
+                print(
+                    "Enter your answer (1-4): ",
+                    end="",
+                    flush=True
+                )
 
     def check_answer(self, question, answer):
         difficulty = question["difficulty"]
@@ -229,16 +237,23 @@ class Quiz:
 
         selected_questions = self.choose_category()
 
-        selected_questions = self.choose_difficulty(selected_questions)
+        selected_questions = self.choose_difficulty(
+            selected_questions
+        )
 
-        selected_questions = self.choose_question_count(selected_questions)
+        selected_questions = self.choose_question_count(
+            selected_questions
+        )
 
         total_questions = len(selected_questions)
 
         for question_number, question in enumerate(
-            selected_questions, start=1
+            selected_questions,
+            start=1
         ):
-            time_limit = self.get_time_limit(question["difficulty"])
+            time_limit = self.get_time_limit(
+                question["difficulty"]
+            )
 
             self.display_question(
                 question,
@@ -267,10 +282,27 @@ class Quiz:
         else:
             return "F"
 
+    def get_performance_message(self, percentage):
+        if percentage >= 90:
+            return "Excellent performance!"
+        elif percentage >= 80:
+            return "Great job!"
+        elif percentage >= 70:
+            return "Good effort!"
+        elif percentage >= 60:
+            return "Keep practicing!"
+        else:
+            return "More practice needed!"
+
     def show_result(self, total_questions):
         wrong_answers = total_questions - self.score
         percentage = (self.score / total_questions) * 100
+
         grade = self.get_grade(percentage)
+
+        message = self.get_performance_message(
+            percentage
+        )
 
         print("\n================================")
         print("          QUIZ RESULT")
@@ -281,6 +313,7 @@ class Quiz:
         print(f"Score           : {self.score}/{total_questions}")
         print(f"Percentage      : {percentage:.0f}%")
         print(f"Grade           : {grade}")
+        print(f"Performance     : {message}")
         print("================================")
 
     def show_difficulty_stats(self):
@@ -333,7 +366,9 @@ class Quiz:
 
     def play_again(self):
         while True:
-            choice = input("\nDo you want to play again? (y/n): ").lower()
+            choice = input(
+                "\nDo you want to play again? (y/n): "
+            ).lower()
 
             if choice == "y":
                 return True
