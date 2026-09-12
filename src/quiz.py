@@ -7,6 +7,7 @@ class Quiz:
     def __init__(self, questions):
         self.questions = questions
         self.score = 0
+        self.review = []
 
     def display_categories(self):
         categories = sorted(
@@ -166,6 +167,14 @@ class Quiz:
     def check_answer(self, question, answer):
         if answer is None:
             print("Correct answer:", question["answer"])
+
+            self.review.append({
+                "question": question["question"],
+                "selected": "Time's Up",
+                "correct": question["answer"],
+                "is_correct": False
+            })
+
             return
 
         selected_answer = question["options"][answer - 1]
@@ -173,12 +182,22 @@ class Quiz:
         if selected_answer == question["answer"]:
             print("Correct!")
             self.score += 1
+            is_correct = True
         else:
             print("Wrong!")
             print("Correct answer:", question["answer"])
+            is_correct = False
+
+        self.review.append({
+            "question": question["question"],
+            "selected": selected_answer,
+            "correct": question["answer"],
+            "is_correct": is_correct
+        })
 
     def start(self):
         self.score = 0
+        self.review = []
 
         selected_questions = self.choose_category()
 
@@ -204,6 +223,7 @@ class Quiz:
             self.check_answer(question, answer)
 
         self.show_result(total_questions)
+        self.show_review()
 
     def get_grade(self, percentage):
         if percentage >= 90:
@@ -232,6 +252,23 @@ class Quiz:
         print(f"Percentage      : {percentage:.0f}%")
         print(f"Grade           : {grade}")
         print("================================")
+
+    def show_review(self):
+        print("\n================================")
+        print("         ANSWER REVIEW")
+        print("================================")
+
+        for i, item in enumerate(self.review, start=1):
+            print(f"\nQuestion {i}: {item['question']}")
+            print(f"Your Answer    : {item['selected']}")
+            print(f"Correct Answer : {item['correct']}")
+
+            if item["is_correct"]:
+                print("Result         : Correct")
+            else:
+                print("Result         : Wrong")
+
+        print("\n================================")
 
     def play_again(self):
         while True:
