@@ -8,7 +8,8 @@
             "define"
         ],
         "answer": "def",
-        "category": "Python Basics"
+        "category": "Python Basics",
+        "difficulty": "Easy"
     },
     {
         "question": "Which data type is used to store multiple items in a single variable in Python?",
@@ -19,7 +20,8 @@
             "float"
         ],
         "answer": "list",
-        "category": "Python Basics"
+        "category": "Python Basics",
+        "difficulty": "Easy"
     },
     {
         "question": "Which symbol is used for comments in Python?",
@@ -30,7 +32,8 @@
             "--"
         ],
         "answer": "#",
-        "category": "Python Basics"
+        "category": "Python Basics",
+        "difficulty": "Easy"
     },
     {
         "question": "Which function is used to display output in Python?",
@@ -41,7 +44,8 @@
             "show()"
         ],
         "answer": "print()",
-        "category": "Python Basics"
+        "category": "Python Basics",
+        "difficulty": "Easy"
     },
     {
         "question": "Which keyword is used to create a loop over a sequence in Python?",
@@ -52,6 +56,7 @@
             "iterate"
         ],
         "answer": "for",
-        "category": "Python Basics"
+        "category": "Python Basics",
+        "difficulty": "Medium"
     }
 ]

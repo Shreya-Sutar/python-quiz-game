@@ -7,7 +7,9 @@ class Quiz:
         self.score = 0
 
     def display_categories(self):
-        categories = sorted(set(question["category"] for question in self.questions))
+        categories = sorted(
+            set(question["category"] for question in self.questions)
+        )
 
         print("\n==============================")
         print("       QUIZ CATEGORIES")
@@ -47,8 +49,52 @@ class Quiz:
                 f"Invalid choice. Please enter a number from 1 to {len(categories) + 1}."
             )
 
+    def display_difficulties(self):
+        difficulties = ["Easy", "Medium", "Hard"]
+
+        print("\n==============================")
+        print("       QUIZ DIFFICULTY")
+        print("==============================")
+
+        for i, difficulty in enumerate(difficulties, start=1):
+            print(f"{i}. {difficulty}")
+
+        print("4. All Difficulties")
+
+        return difficulties
+
+    def choose_difficulty(self, questions):
+        difficulties = self.display_difficulties()
+
+        while True:
+            choice = input("Choose a difficulty (1-4): ")
+
+            if choice.isdigit():
+                choice = int(choice)
+
+                if 1 <= choice <= 3:
+                    selected_difficulty = difficulties[choice - 1]
+
+                    filtered_questions = [
+                        question
+                        for question in questions
+                        if question["difficulty"] == selected_difficulty
+                    ]
+
+                    if filtered_questions:
+                        return filtered_questions
+
+                    print("No questions available for this difficulty.")
+                    continue
+
+                if choice == 4:
+                    return questions
+
+            print("Invalid choice. Please enter a number from 1 to 4.")
+
     def display_question(self, question):
         print("\nCategory:", question["category"])
+        print("Difficulty:", question["difficulty"])
         print(question["question"])
 
         for i, option in enumerate(question["options"], start=1):
@@ -75,6 +121,8 @@ class Quiz:
 
     def start(self):
         selected_questions = self.choose_category()
+
+        selected_questions = self.choose_difficulty(selected_questions)
 
         random.shuffle(selected_questions)
 
