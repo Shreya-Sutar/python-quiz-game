@@ -11,9 +11,17 @@ for question in questions:
     for i, option in enumerate(question["options"], start=1):
         print(f"{i}. {option}")
 
-    answer = input("Enter your answer (1-4): ")
+    while True:
+        answer = input("Enter your answer (1-4): ")
 
-    if question["options"][int(answer) - 1] == question["answer"]:
+        if answer in ["1", "2", "3", "4"]:
+            break
+
+        print("Invalid choice. Please enter a number from 1 to 4.")
+
+    selected_answer = question["options"][int(answer) - 1]
+
+    if selected_answer == question["answer"]:
         print("Correct!")
         score += 1
     else:
