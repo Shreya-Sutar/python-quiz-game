@@ -44,5 +44,16 @@ class Quiz:
         self.show_result()
 
     def show_result(self):
-        print("\nQuiz completed!")
-        print("Your score:", self.score, "/", len(self.questions))
+        total_questions = len(self.questions)
+        wrong_answers = total_questions - self.score
+        percentage = (self.score / total_questions) * 100
+
+        print("\n================================")
+        print("          QUIZ RESULT")
+        print("================================")
+        print(f"Total Questions : {total_questions}")
+        print(f"Correct Answers : {self.score}")
+        print(f"Wrong Answers   : {wrong_answers}")
+        print(f"Score           : {self.score}/{total_questions}")
+        print(f"Percentage      : {percentage:.0f}%")
+        print("================================")
