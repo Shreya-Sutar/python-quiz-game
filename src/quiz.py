@@ -13,6 +13,12 @@ class Quiz:
         self.difficulty_stats = {}
         self.category_stats = {}
 
+    def reset_quiz(self):
+        self.score = 0
+        self.review = []
+        self.difficulty_stats = {}
+        self.category_stats = {}
+
     def display_categories(self):
         categories = sorted(
             set(
@@ -65,7 +71,8 @@ class Quiz:
                     return self.questions
 
             print(
-                f"Invalid choice. Please enter a number from 1 to {len(categories) + 1}."
+                f"Invalid choice. Please enter a number from 1 to "
+                f"{len(categories) + 1}."
             )
 
     def display_difficulties(self):
@@ -138,7 +145,8 @@ class Quiz:
                     return random.sample(questions, choice)
 
             print(
-                f"Invalid choice. Please enter a number from 1 to {total_available}."
+                f"Invalid choice. Please enter a number from 1 "
+                f"to {total_available}."
             )
 
     def get_time_limit(self, difficulty):
@@ -150,29 +158,42 @@ class Quiz:
 
         return time_limits.get(difficulty, 15)
 
-    def display_question(self, question, question_number, total_questions):
+    def display_question(
+        self,
+        question,
+        question_number,
+        total_questions
+    ):
         print("\n--------------------------------")
         print(f"Question {question_number} of {total_questions}")
         print("--------------------------------")
 
-        print("Category:", question.get("category", "Unknown"))
-        print("Difficulty:", question.get("difficulty", "Unknown"))
+        category = question.get("category", "Unknown")
+        difficulty = question.get("difficulty", "Unknown")
+        question_text = question.get(
+            "question",
+            "Question unavailable."
+        )
 
-        print(question.get("question", "Question unavailable."))
+        print("Category:", category)
+        print("Difficulty:", difficulty)
+        print(question_text)
 
         options = question.get("options", [])
 
         for i, option in enumerate(options, start=1):
             print(f"{i}. {option}")
 
-        time_limit = self.get_time_limit(
-            question.get("difficulty", "Medium")
-        )
+        time_limit = self.get_time_limit(difficulty)
 
         print(f"\nYou have {time_limit} seconds to answer.")
 
     def get_answer(self, time_limit):
-        print("Enter your answer (1-4): ", end="", flush=True)
+        print(
+            "Enter your answer (1-4): ",
+            end="",
+            flush=True
+        )
 
         start_time = time.time()
 
@@ -201,11 +222,7 @@ class Quiz:
                     flush=True
                 )
 
-    def check_answer(self, question, answer):
-        difficulty = question.get("difficulty", "Unknown")
-        category = question.get("category", "Unknown")
-        correct_answer = question.get("answer")
-
+    def initialize_statistics(self, difficulty, category):
         if difficulty not in self.difficulty_stats:
             self.difficulty_stats[difficulty] = {
                 "total": 0,
@@ -217,6 +234,16 @@ class Quiz:
                 "total": 0,
                 "correct": 0
             }
+
+    def check_answer(self, question, answer):
+        difficulty = question.get("difficulty", "Unknown")
+        category = question.get("category", "Unknown")
+        correct_answer = question.get("answer")
+
+        self.initialize_statistics(
+            difficulty,
+            category
+        )
 
         self.difficulty_stats[difficulty]["total"] += 1
         self.category_stats[category]["total"] += 1
@@ -244,20 +271,18 @@ class Quiz:
 
         selected_answer = options[answer - 1]
 
-        if selected_answer == correct_answer:
+        is_correct = selected_answer == correct_answer
+
+        if is_correct:
             print("Correct!")
 
             self.score += 1
             self.difficulty_stats[difficulty]["correct"] += 1
             self.category_stats[category]["correct"] += 1
 
-            is_correct = True
-
         else:
             print("Wrong!")
             print("Correct answer:", correct_answer)
-
-            is_correct = False
 
         self.review.append({
             "question": question.get(
@@ -270,10 +295,7 @@ class Quiz:
         })
 
     def start(self):
-        self.score = 0
-        self.review = []
-        self.difficulty_stats = {}
-        self.category_stats = {}
+        self.reset_quiz()
 
         selected_questions = self.choose_category()
 
@@ -299,13 +321,24 @@ class Quiz:
 
         total_questions = len(selected_questions)
 
+        self.run_quiz(
+            selected_questions,
+            total_questions
+        )
+
+        self.display_final_results(total_questions)
+
+    def run_quiz(self, selected_questions, total_questions):
         for question_number, question in enumerate(
             selected_questions,
             start=1
         ):
-            time_limit = self.get_time_limit(
-                question.get("difficulty", "Medium")
+            difficulty = question.get(
+                "difficulty",
+                "Medium"
             )
+
+            time_limit = self.get_time_limit(difficulty)
 
             self.display_question(
                 question,
@@ -315,8 +348,12 @@ class Quiz:
 
             answer = self.get_answer(time_limit)
 
-            self.check_answer(question, answer)
+            self.check_answer(
+                question,
+                answer
+            )
 
+    def display_final_results(self, total_questions):
         self.show_result(total_questions)
         self.show_session_summary(total_questions)
         self.show_difficulty_stats()
@@ -355,10 +392,7 @@ class Quiz:
         percentage = (self.score / total_questions) * 100
 
         grade = self.get_grade(percentage)
-
-        message = self.get_performance_message(
-            percentage
-        )
+        message = self.get_performance_message(percentage)
 
         print("\n================================")
         print("          QUIZ RESULT")
@@ -421,10 +455,24 @@ class Quiz:
         print("         ANSWER REVIEW")
         print("================================")
 
-        for i, item in enumerate(self.review, start=1):
-            print(f"\nQuestion {i}: {item['question']}")
-            print(f"Your Answer    : {item['selected']}")
-            print(f"Correct Answer : {item['correct']}")
+        for i, item in enumerate(
+            self.review,
+            start=1
+        ):
+            print(
+                f"\nQuestion {i}: "
+                f"{item['question']}"
+            )
+
+            print(
+                f"Your Answer    : "
+                f"{item['selected']}"
+            )
+
+            print(
+                f"Correct Answer : "
+                f"{item['correct']}"
+            )
 
             if item["is_correct"]:
                 print("Result         : Correct")
@@ -444,7 +492,10 @@ class Quiz:
             "grade": grade
         }
 
-        save_result("data/results.json", result)
+        save_result(
+            "data/results.json",
+            result
+        )
 
     def show_history(self):
         results = load_results("data/results.json")
@@ -458,7 +509,10 @@ class Quiz:
             print("================================")
             return
 
-        for i, result in enumerate(results, start=1):
+        for i, result in enumerate(
+            results,
+            start=1
+        ):
             if not isinstance(result, dict):
                 continue
 
@@ -483,7 +537,10 @@ class Quiz:
             result
             for result in results
             if isinstance(result, dict)
-            and isinstance(result.get("percentage"), (int, float))
+            and isinstance(
+                result.get("percentage"),
+                (int, float)
+            )
         ]
 
         if not valid_results:
