@@ -12,18 +12,6 @@
         "difficulty": "Easy"
     },
     {
-        "question": "Which data type is used to store multiple items in a single variable in Python?",
-        "options": [
-            "list",
-            "integer",
-            "boolean",
-            "float"
-        ],
-        "answer": "list",
-        "category": "Python Basics",
-        "difficulty": "Easy"
-    },
-    {
         "question": "Which symbol is used for comments in Python?",
         "options": [
             "//",
@@ -57,6 +45,174 @@
         ],
         "answer": "for",
         "category": "Python Basics",
+        "difficulty": "Medium"
+    },
+    {
+        "question": "What is the output of print(2 + 3)?",
+        "options": [
+            "2",
+            "3",
+            "5",
+            "6"
+        ],
+        "answer": "5",
+        "category": "Python Basics",
+        "difficulty": "Easy"
+    },
+    {
+        "question": "Which data type is used to store multiple items in a single variable in Python?",
+        "options": [
+            "list",
+            "integer",
+            "boolean",
+            "float"
+        ],
+        "answer": "list",
+        "category": "Python Data Types",
+        "difficulty": "Easy"
+    },
+    {
+        "question": "Which data type stores True or False values?",
+        "options": [
+            "String",
+            "Boolean",
+            "Float",
+            "List"
+        ],
+        "answer": "Boolean",
+        "category": "Python Data Types",
+        "difficulty": "Easy"
+    },
+    {
+        "question": "Which data type is immutable in Python?",
+        "options": [
+            "List",
+            "Dictionary",
+            "Tuple",
+            "Set"
+        ],
+        "answer": "Tuple",
+        "category": "Python Data Types",
+        "difficulty": "Medium"
+    },
+    {
+        "question": "Which collection stores key-value pairs in Python?",
+        "options": [
+            "List",
+            "Tuple",
+            "Dictionary",
+            "Set"
+        ],
+        "answer": "Dictionary",
+        "category": "Python Data Types",
+        "difficulty": "Easy"
+    },
+    {
+        "question": "Which keyword is used to return a value from a function?",
+        "options": [
+            "send",
+            "return",
+            "output",
+            "give"
+        ],
+        "answer": "return",
+        "category": "Python Functions",
+        "difficulty": "Easy"
+    },
+    {
+        "question": "What is the output of len('Python')?",
+        "options": [
+            "5",
+            "6",
+            "7",
+            "8"
+        ],
+        "answer": "6",
+        "category": "Python Functions",
+        "difficulty": "Easy"
+    },
+    {
+        "question": "Which function converts a string into an integer?",
+        "options": [
+            "str()",
+            "float()",
+            "int()",
+            "number()"
+        ],
+        "answer": "int()",
+        "category": "Python Functions",
+        "difficulty": "Easy"
+    },
+    {
+        "question": "What is the output of the following code: x = [1, 2, 3]; print(x[-1])?",
+        "options": [
+            "1",
+            "2",
+            "3",
+            "-1"
+        ],
+        "answer": "3",
+        "category": "Python Data Types",
+        "difficulty": "Medium"
+    },
+    {
+        "question": "Which keyword is used to handle exceptions in Python?",
+        "options": [
+            "catch",
+            "error",
+            "try",
+            "exception"
+        ],
+        "answer": "try",
+        "category": "Python Basics",
+        "difficulty": "Medium"
+    },
+    {
+        "question": "What will be the output of: print(10 // 3)?",
+        "options": [
+            "3",
+            "3.33",
+            "1",
+            "0"
+        ],
+        "answer": "3",
+        "category": "Python Basics",
+        "difficulty": "Medium"
+    },
+    {
+        "question": "What is the purpose of *args in a Python function?",
+        "options": [
+            "Accept multiple positional arguments",
+            "Accept multiple keyword arguments",
+            "Create a list",
+            "Create a class"
+        ],
+        "answer": "Accept multiple positional arguments",
+        "category": "Python Functions",
+        "difficulty": "Hard"
+    },
+    {
+        "question": "What is the purpose of **kwargs in a Python function?",
+        "options": [
+            "Accept multiple positional arguments",
+            "Accept multiple keyword arguments",
+            "Create a tuple",
+            "Create a loop"
+        ],
+        "answer": "Accept multiple keyword arguments",
+        "category": "Python Functions",
+        "difficulty": "Hard"
+    },
+    {
+        "question": "Which data structure does a Python set use to ensure that its elements are unique?",
+        "options": [
+            "Duplicate values",
+            "Unique values",
+            "Key-value pairs",
+            "Ordered indexes"
+        ],
+        "answer": "Unique values",
+        "category": "Python Data Types",
         "difficulty": "Medium"
     }
 ]
