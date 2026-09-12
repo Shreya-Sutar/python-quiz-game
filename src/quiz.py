@@ -1,10 +1,13 @@
 import random
+import time
+import msvcrt
 
 
 class Quiz:
     def __init__(self, questions):
         self.questions = questions
         self.score = 0
+        self.time_limit = 15
 
     def display_categories(self):
         categories = sorted(
@@ -126,16 +129,41 @@ class Quiz:
         for i, option in enumerate(question["options"], start=1):
             print(f"{i}. {option}")
 
+        print(f"\nYou have {self.time_limit} seconds to answer.")
+
     def get_answer(self):
+        print("Enter your answer (1-4): ", end="", flush=True)
+
+        start_time = time.time()
+        answer = ""
+
         while True:
-            answer = input("Enter your answer (1-4): ")
+            elapsed_time = time.time() - start_time
 
-            if answer in ["1", "2", "3", "4"]:
-                return int(answer)
+            if elapsed_time >= self.time_limit:
+                print("\nTime's up!")
+                return None
 
-            print("Invalid choice. Please enter a number from 1 to 4.")
+            if msvcrt.kbhit():
+                key = msvcrt.getwch()
+
+                if key in ["1", "2", "3", "4"]:
+                    answer = key
+
+                    print(key)
+                    return int(answer)
+
+                if key == "\r":
+                    continue
+
+                print("\nInvalid choice. Please enter a number from 1 to 4.")
+                print("Enter your answer (1-4): ", end="", flush=True)
 
     def check_answer(self, question, answer):
+        if answer is None:
+            print("Correct answer:", question["answer"])
+            return
+
         selected_answer = question["options"][answer - 1]
 
         if selected_answer == question["answer"]:
