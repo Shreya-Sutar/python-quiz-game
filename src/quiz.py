@@ -6,6 +6,47 @@ class Quiz:
         self.questions = questions
         self.score = 0
 
+    def display_categories(self):
+        categories = sorted(set(question["category"] for question in self.questions))
+
+        print("\n==============================")
+        print("       QUIZ CATEGORIES")
+        print("==============================")
+
+        for i, category in enumerate(categories, start=1):
+            print(f"{i}. {category}")
+
+        print(f"{len(categories) + 1}. All Categories")
+
+        return categories
+
+    def choose_category(self):
+        categories = self.display_categories()
+
+        while True:
+            choice = input(
+                f"Choose a category (1-{len(categories) + 1}): "
+            )
+
+            if choice.isdigit():
+                choice = int(choice)
+
+                if 1 <= choice <= len(categories):
+                    selected_category = categories[choice - 1]
+
+                    return [
+                        question
+                        for question in self.questions
+                        if question["category"] == selected_category
+                    ]
+
+                if choice == len(categories) + 1:
+                    return self.questions
+
+            print(
+                f"Invalid choice. Please enter a number from 1 to {len(categories) + 1}."
+            )
+
     def display_question(self, question):
         print("\nCategory:", question["category"])
         print(question["question"])
@@ -33,19 +74,20 @@ class Quiz:
             print("Correct answer:", question["answer"])
 
     def start(self):
-        random.shuffle(self.questions)
+        selected_questions = self.choose_category()
 
-        for question in self.questions:
+        random.shuffle(selected_questions)
+
+        for question in selected_questions:
             self.display_question(question)
 
             answer = self.get_answer()
 
             self.check_answer(question, answer)
 
-        self.show_result()
+        self.show_result(len(selected_questions))
 
-    def show_result(self):
-        total_questions = len(self.questions)
+    def show_result(self, total_questions):
         wrong_answers = total_questions - self.score
         percentage = (self.score / total_questions) * 100
 
