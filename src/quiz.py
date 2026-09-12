@@ -205,9 +205,22 @@ class Quiz:
 
         self.show_result(total_questions)
 
+    def get_grade(self, percentage):
+        if percentage >= 90:
+            return "A"
+        elif percentage >= 80:
+            return "B"
+        elif percentage >= 70:
+            return "C"
+        elif percentage >= 60:
+            return "D"
+        else:
+            return "F"
+
     def show_result(self, total_questions):
         wrong_answers = total_questions - self.score
         percentage = (self.score / total_questions) * 100
+        grade = self.get_grade(percentage)
 
         print("\n================================")
         print("          QUIZ RESULT")
@@ -217,6 +230,7 @@ class Quiz:
         print(f"Wrong Answers   : {wrong_answers}")
         print(f"Score           : {self.score}/{total_questions}")
         print(f"Percentage      : {percentage:.0f}%")
+        print(f"Grade           : {grade}")
         print("================================")
 
     def play_again(self):
