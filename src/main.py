@@ -26,6 +26,7 @@ for question in questions:
         score += 1
     else:
         print("Wrong!")
+        print("Correct answer:", question["answer"])
 
 print("\nQuiz completed!")
 print("Your score:", score, "/", len(questions))
