@@ -7,7 +7,8 @@ class Quiz:
         self.score = 0
 
     def display_question(self, question):
-        print("\n" + question["question"])
+        print("\nCategory:", question["category"])
+        print(question["question"])
 
         for i, option in enumerate(question["options"], start=1):
             print(f"{i}. {option}")

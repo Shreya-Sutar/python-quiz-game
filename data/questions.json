@@ -1,0 +1,57 @@
+[
+    {
+        "question": "Which keyword is used to define a function in Python?",
+        "options": [
+            "function",
+            "def",
+            "fun",
+            "define"
+        ],
+        "answer": "def",
+        "category": "Python Basics"
+    },
+    {
+        "question": "Which data type is used to store multiple items in a single variable in Python?",
+        "options": [
+            "list",
+            "integer",
+            "boolean",
+            "float"
+        ],
+        "answer": "list",
+        "category": "Python Basics"
+    },
+    {
+        "question": "Which symbol is used for comments in Python?",
+        "options": [
+            "//",
+            "/*",
+            "#",
+            "--"
+        ],
+        "answer": "#",
+        "category": "Python Basics"
+    },
+    {
+        "question": "Which function is used to display output in Python?",
+        "options": [
+            "display()",
+            "print()",
+            "output()",
+            "show()"
+        ],
+        "answer": "print()",
+        "category": "Python Basics"
+    },
+    {
+        "question": "Which keyword is used to create a loop over a sequence in Python?",
+        "options": [
+            "loop",
+            "repeat",
+            "for",
+            "iterate"
+        ],
+        "answer": "for",
+        "category": "Python Basics"
+    }
+]
