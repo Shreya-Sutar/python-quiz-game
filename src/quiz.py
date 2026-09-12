@@ -15,8 +15,16 @@ class Quiz:
 
     def display_categories(self):
         categories = sorted(
-            set(question["category"] for question in self.questions)
+            set(
+                question.get("category", "Unknown")
+                for question in self.questions
+                if isinstance(question, dict)
+            )
         )
+
+        if not categories:
+            print("\nNo valid question categories found.")
+            return []
 
         print("\n==============================")
         print("       QUIZ CATEGORIES")
@@ -32,6 +40,9 @@ class Quiz:
     def choose_category(self):
         categories = self.display_categories()
 
+        if not categories:
+            return []
+
         while True:
             choice = input(
                 f"Choose a category (1-{len(categories) + 1}): "
@@ -46,7 +57,8 @@ class Quiz:
                     return [
                         question
                         for question in self.questions
-                        if question["category"] == selected_category
+                        if question.get("category", "Unknown")
+                        == selected_category
                     ]
 
                 if choice == len(categories) + 1:
@@ -71,6 +83,9 @@ class Quiz:
         return difficulties
 
     def choose_difficulty(self, questions):
+        if not questions:
+            return []
+
         difficulties = self.display_difficulties()
 
         while True:
@@ -85,7 +100,8 @@ class Quiz:
                     filtered_questions = [
                         question
                         for question in questions
-                        if question["difficulty"] == selected_difficulty
+                        if question.get("difficulty")
+                        == selected_difficulty
                     ]
 
                     if filtered_questions:
@@ -101,6 +117,9 @@ class Quiz:
 
     def choose_question_count(self, questions):
         total_available = len(questions)
+
+        if total_available == 0:
+            return []
 
         print("\n==============================")
         print("     NUMBER OF QUESTIONS")
@@ -135,14 +154,20 @@ class Quiz:
         print("\n--------------------------------")
         print(f"Question {question_number} of {total_questions}")
         print("--------------------------------")
-        print("Category:", question["category"])
-        print("Difficulty:", question["difficulty"])
-        print(question["question"])
 
-        for i, option in enumerate(question["options"], start=1):
+        print("Category:", question.get("category", "Unknown"))
+        print("Difficulty:", question.get("difficulty", "Unknown"))
+
+        print(question.get("question", "Question unavailable."))
+
+        options = question.get("options", [])
+
+        for i, option in enumerate(options, start=1):
             print(f"{i}. {option}")
 
-        time_limit = self.get_time_limit(question["difficulty"])
+        time_limit = self.get_time_limit(
+            question.get("difficulty", "Medium")
+        )
 
         print(f"\nYou have {time_limit} seconds to answer.")
 
@@ -177,8 +202,9 @@ class Quiz:
                 )
 
     def check_answer(self, question, answer):
-        difficulty = question["difficulty"]
-        category = question["category"]
+        difficulty = question.get("difficulty", "Unknown")
+        category = question.get("category", "Unknown")
+        correct_answer = question.get("answer")
 
         if difficulty not in self.difficulty_stats:
             self.difficulty_stats[difficulty] = {
@@ -196,20 +222,29 @@ class Quiz:
         self.category_stats[category]["total"] += 1
 
         if answer is None:
-            print("Correct answer:", question["answer"])
+            print("Correct answer:", correct_answer)
 
             self.review.append({
-                "question": question["question"],
+                "question": question.get(
+                    "question",
+                    "Question unavailable."
+                ),
                 "selected": "Time's Up",
-                "correct": question["answer"],
+                "correct": correct_answer,
                 "is_correct": False
             })
 
             return
 
-        selected_answer = question["options"][answer - 1]
+        options = question.get("options", [])
 
-        if selected_answer == question["answer"]:
+        if not isinstance(options, list) or len(options) < 4:
+            print("Error: Invalid answer options.")
+            return
+
+        selected_answer = options[answer - 1]
+
+        if selected_answer == correct_answer:
             print("Correct!")
 
             self.score += 1
@@ -220,14 +255,17 @@ class Quiz:
 
         else:
             print("Wrong!")
-            print("Correct answer:", question["answer"])
+            print("Correct answer:", correct_answer)
 
             is_correct = False
 
         self.review.append({
-            "question": question["question"],
+            "question": question.get(
+                "question",
+                "Question unavailable."
+            ),
             "selected": selected_answer,
-            "correct": question["answer"],
+            "correct": correct_answer,
             "is_correct": is_correct
         })
 
@@ -239,13 +277,25 @@ class Quiz:
 
         selected_questions = self.choose_category()
 
+        if not selected_questions:
+            print("\nNo questions available.")
+            return
+
         selected_questions = self.choose_difficulty(
             selected_questions
         )
 
+        if not selected_questions:
+            print("\nNo questions available.")
+            return
+
         selected_questions = self.choose_question_count(
             selected_questions
         )
+
+        if not selected_questions:
+            print("\nNo questions selected.")
+            return
 
         total_questions = len(selected_questions)
 
@@ -254,7 +304,7 @@ class Quiz:
             start=1
         ):
             time_limit = self.get_time_limit(
-                question["difficulty"]
+                question.get("difficulty", "Medium")
             )
 
             self.display_question(
@@ -409,11 +459,19 @@ class Quiz:
             return
 
         for i, result in enumerate(results, start=1):
+            if not isinstance(result, dict):
+                continue
+
+            score = result.get("score", 0)
+            total = result.get("total_questions", 0)
+            percentage = result.get("percentage", 0)
+            grade = result.get("grade", "N/A")
+
             print(
                 f"Attempt {i}: "
-                f"{result['score']}/{result['total_questions']} "
-                f"- {result['percentage']:.2f}% "
-                f"- Grade {result['grade']}"
+                f"{score}/{total} "
+                f"- {percentage:.2f}% "
+                f"- Grade {grade}"
             )
 
         print("================================")
@@ -421,11 +479,18 @@ class Quiz:
     def show_high_score(self):
         results = load_results("data/results.json")
 
-        if not results:
+        valid_results = [
+            result
+            for result in results
+            if isinstance(result, dict)
+            and isinstance(result.get("percentage"), (int, float))
+        ]
+
+        if not valid_results:
             return
 
         best_result = max(
-            results,
+            valid_results,
             key=lambda result: result["percentage"]
         )
 
@@ -434,15 +499,16 @@ class Quiz:
         print("================================")
         print(
             f"Best Score : "
-            f"{best_result['score']}/{best_result['total_questions']}"
+            f"{best_result.get('score', 0)}/"
+            f"{best_result.get('total_questions', 0)}"
         )
         print(
             f"Percentage : "
-            f"{best_result['percentage']:.2f}%"
+            f"{best_result.get('percentage', 0):.2f}%"
         )
         print(
             f"Grade      : "
-            f"{best_result['grade']}"
+            f"{best_result.get('grade', 'N/A')}"
         )
         print("================================")
 
