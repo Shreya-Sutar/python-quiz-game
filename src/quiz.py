@@ -266,6 +266,7 @@ class Quiz:
             self.check_answer(question, answer)
 
         self.show_result(total_questions)
+        self.show_session_summary(total_questions)
         self.show_difficulty_stats()
         self.show_category_stats()
         self.show_review()
@@ -314,6 +315,19 @@ class Quiz:
         print(f"Percentage      : {percentage:.0f}%")
         print(f"Grade           : {grade}")
         print(f"Performance     : {message}")
+        print("================================")
+
+    def show_session_summary(self, total_questions):
+        wrong_answers = total_questions - self.score
+        accuracy = (self.score / total_questions) * 100
+
+        print("\n================================")
+        print("       SESSION SUMMARY")
+        print("================================")
+        print(f"Questions Attempted : {total_questions}")
+        print(f"Questions Correct   : {self.score}")
+        print(f"Questions Wrong     : {wrong_answers}")
+        print(f"Accuracy            : {accuracy:.0f}%")
         print("================================")
 
     def show_difficulty_stats(self):
