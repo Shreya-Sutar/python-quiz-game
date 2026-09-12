@@ -7,7 +7,6 @@ class Quiz:
     def __init__(self, questions):
         self.questions = questions
         self.score = 0
-        self.time_limit = 15
 
     def display_categories(self):
         categories = sorted(
@@ -118,6 +117,15 @@ class Quiz:
                 f"Invalid choice. Please enter a number from 1 to {total_available}."
             )
 
+    def get_time_limit(self, difficulty):
+        time_limits = {
+            "Easy": 20,
+            "Medium": 15,
+            "Hard": 10
+        }
+
+        return time_limits.get(difficulty, 15)
+
     def display_question(self, question, question_number, total_questions):
         print("\n--------------------------------")
         print(f"Question {question_number} of {total_questions}")
@@ -129,18 +137,19 @@ class Quiz:
         for i, option in enumerate(question["options"], start=1):
             print(f"{i}. {option}")
 
-        print(f"\nYou have {self.time_limit} seconds to answer.")
+        time_limit = self.get_time_limit(question["difficulty"])
 
-    def get_answer(self):
+        print(f"\nYou have {time_limit} seconds to answer.")
+
+    def get_answer(self, time_limit):
         print("Enter your answer (1-4): ", end="", flush=True)
 
         start_time = time.time()
-        answer = ""
 
         while True:
             elapsed_time = time.time() - start_time
 
-            if elapsed_time >= self.time_limit:
+            if elapsed_time >= time_limit:
                 print("\nTime's up!")
                 return None
 
@@ -148,13 +157,8 @@ class Quiz:
                 key = msvcrt.getwch()
 
                 if key in ["1", "2", "3", "4"]:
-                    answer = key
-
                     print(key)
-                    return int(answer)
-
-                if key == "\r":
-                    continue
+                    return int(key)
 
                 print("\nInvalid choice. Please enter a number from 1 to 4.")
                 print("Enter your answer (1-4): ", end="", flush=True)
@@ -187,13 +191,15 @@ class Quiz:
         for question_number, question in enumerate(
             selected_questions, start=1
         ):
+            time_limit = self.get_time_limit(question["difficulty"])
+
             self.display_question(
                 question,
                 question_number,
                 total_questions
             )
 
-            answer = self.get_answer()
+            answer = self.get_answer(time_limit)
 
             self.check_answer(question, answer)
 
