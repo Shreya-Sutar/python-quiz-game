@@ -1,27 +1,43 @@
-def display_question(question):
-    print("\n" + question["question"])
+class Quiz:
+    def __init__(self, questions):
+        self.questions = questions
+        self.score = 0
 
-    for i, option in enumerate(question["options"], start=1):
-        print(f"{i}. {option}")
+    def display_question(self, question):
+        print("\n" + question["question"])
 
+        for i, option in enumerate(question["options"], start=1):
+            print(f"{i}. {option}")
 
-def get_answer():
-    while True:
-        answer = input("Enter your answer (1-4): ")
+    def get_answer(self):
+        while True:
+            answer = input("Enter your answer (1-4): ")
 
-        if answer in ["1", "2", "3", "4"]:
-            return int(answer)
+            if answer in ["1", "2", "3", "4"]:
+                return int(answer)
 
-        print("Invalid choice. Please enter a number from 1 to 4.")
+            print("Invalid choice. Please enter a number from 1 to 4.")
 
+    def check_answer(self, question, answer):
+        selected_answer = question["options"][answer - 1]
 
-def check_answer(question, answer):
-    selected_answer = question["options"][answer - 1]
+        if selected_answer == question["answer"]:
+            print("Correct!")
+            self.score += 1
+        else:
+            print("Wrong!")
+            print("Correct answer:", question["answer"])
 
-    if selected_answer == question["answer"]:
-        print("Correct!")
-        return True
+    def start(self):
+        for question in self.questions:
+            self.display_question(question)
 
-    print("Wrong!")
-    print("Correct answer:", question["answer"])
-    return False
+            answer = self.get_answer()
+
+            self.check_answer(question, answer)
+
+        self.show_result()
+
+    def show_result(self):
+        print("\nQuiz completed!")
+        print("Your score:", self.score, "/", len(self.questions))
