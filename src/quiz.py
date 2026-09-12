@@ -92,6 +92,29 @@ class Quiz:
 
             print("Invalid choice. Please enter a number from 1 to 4.")
 
+    def choose_question_count(self, questions):
+        total_available = len(questions)
+
+        print("\n==============================")
+        print("     NUMBER OF QUESTIONS")
+        print("==============================")
+        print(f"Available questions: {total_available}")
+
+        while True:
+            choice = input(
+                f"How many questions do you want? (1-{total_available}): "
+            )
+
+            if choice.isdigit():
+                choice = int(choice)
+
+                if 1 <= choice <= total_available:
+                    return random.sample(questions, choice)
+
+            print(
+                f"Invalid choice. Please enter a number from 1 to {total_available}."
+            )
+
     def display_question(self, question):
         print("\nCategory:", question["category"])
         print("Difficulty:", question["difficulty"])
@@ -126,7 +149,7 @@ class Quiz:
 
         selected_questions = self.choose_difficulty(selected_questions)
 
-        random.shuffle(selected_questions)
+        selected_questions = self.choose_question_count(selected_questions)
 
         for question in selected_questions:
             self.display_question(question)
