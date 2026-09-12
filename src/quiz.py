@@ -274,6 +274,7 @@ class Quiz:
         self.show_review()
         self.save_quiz_result(total_questions)
         self.show_history()
+        self.show_high_score()
 
     def get_grade(self, percentage):
         if percentage >= 90:
@@ -415,6 +416,34 @@ class Quiz:
                 f"- Grade {result['grade']}"
             )
 
+        print("================================")
+
+    def show_high_score(self):
+        results = load_results("data/results.json")
+
+        if not results:
+            return
+
+        best_result = max(
+            results,
+            key=lambda result: result["percentage"]
+        )
+
+        print("\n================================")
+        print("          HIGH SCORE")
+        print("================================")
+        print(
+            f"Best Score : "
+            f"{best_result['score']}/{best_result['total_questions']}"
+        )
+        print(
+            f"Percentage : "
+            f"{best_result['percentage']:.2f}%"
+        )
+        print(
+            f"Grade      : "
+            f"{best_result['grade']}"
+        )
         print("================================")
 
     def play_again(self):
