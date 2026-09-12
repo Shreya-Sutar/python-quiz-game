@@ -1,18 +1,11 @@
-import json
-
 from quiz import Quiz
+from utils import load_questions
 
 
-try:
-    with open("data/questions.json", "r") as file:
-        questions = json.load(file)
+questions = load_questions("data/questions.json")
 
-except FileNotFoundError:
-    print("Error: Questions file was not found.")
-    exit()
 
-except json.JSONDecodeError:
-    print("Error: Questions file contains invalid JSON.")
+if not questions:
     exit()
 
 
