@@ -9,6 +9,7 @@ class Quiz:
         self.score = 0
         self.review = []
         self.difficulty_stats = {}
+        self.category_stats = {}
 
     def display_categories(self):
         categories = sorted(
@@ -167,6 +168,7 @@ class Quiz:
 
     def check_answer(self, question, answer):
         difficulty = question["difficulty"]
+        category = question["category"]
 
         if difficulty not in self.difficulty_stats:
             self.difficulty_stats[difficulty] = {
@@ -174,7 +176,14 @@ class Quiz:
                 "correct": 0
             }
 
+        if category not in self.category_stats:
+            self.category_stats[category] = {
+                "total": 0,
+                "correct": 0
+            }
+
         self.difficulty_stats[difficulty]["total"] += 1
+        self.category_stats[category]["total"] += 1
 
         if answer is None:
             print("Correct answer:", question["answer"])
@@ -192,12 +201,17 @@ class Quiz:
 
         if selected_answer == question["answer"]:
             print("Correct!")
+
             self.score += 1
             self.difficulty_stats[difficulty]["correct"] += 1
+            self.category_stats[category]["correct"] += 1
+
             is_correct = True
+
         else:
             print("Wrong!")
             print("Correct answer:", question["answer"])
+
             is_correct = False
 
         self.review.append({
@@ -211,6 +225,7 @@ class Quiz:
         self.score = 0
         self.review = []
         self.difficulty_stats = {}
+        self.category_stats = {}
 
         selected_questions = self.choose_category()
 
@@ -237,6 +252,7 @@ class Quiz:
 
         self.show_result(total_questions)
         self.show_difficulty_stats()
+        self.show_category_stats()
         self.show_review()
 
     def get_grade(self, percentage):
@@ -280,6 +296,21 @@ class Quiz:
                     f"{difficulty:<8}: "
                     f"{stats['correct']}/{stats['total']}"
                 )
+
+        print("================================")
+
+    def show_category_stats(self):
+        print("\n================================")
+        print("       CATEGORY PERFORMANCE")
+        print("================================")
+
+        for category in sorted(self.category_stats):
+            stats = self.category_stats[category]
+
+            print(
+                f"{category:<20}: "
+                f"{stats['correct']}/{stats['total']}"
+            )
 
         print("================================")
 
