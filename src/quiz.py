@@ -120,6 +120,8 @@ class Quiz:
             print("Correct answer:", question["answer"])
 
     def start(self):
+        self.score = 0
+
         selected_questions = self.choose_category()
 
         selected_questions = self.choose_difficulty(selected_questions)
@@ -148,3 +150,15 @@ class Quiz:
         print(f"Score           : {self.score}/{total_questions}")
         print(f"Percentage      : {percentage:.0f}%")
         print("================================")
+
+    def play_again(self):
+        while True:
+            choice = input("\nDo you want to play again? (y/n): ").lower()
+
+            if choice == "y":
+                return True
+
+            if choice == "n":
+                return False
+
+            print("Invalid choice. Please enter y or n.")

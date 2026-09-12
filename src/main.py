@@ -9,4 +9,10 @@ with open("data/questions.json", "r") as file:
 
 quiz = Quiz(questions)
 
-quiz.start()
+
+while True:
+    quiz.start()
+
+    if not quiz.play_again():
+        print("\nThank you for playing!")
+        break
