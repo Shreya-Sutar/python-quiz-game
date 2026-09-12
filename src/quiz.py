@@ -8,6 +8,7 @@ class Quiz:
         self.questions = questions
         self.score = 0
         self.review = []
+        self.difficulty_stats = {}
 
     def display_categories(self):
         categories = sorted(
@@ -165,6 +166,16 @@ class Quiz:
                 print("Enter your answer (1-4): ", end="", flush=True)
 
     def check_answer(self, question, answer):
+        difficulty = question["difficulty"]
+
+        if difficulty not in self.difficulty_stats:
+            self.difficulty_stats[difficulty] = {
+                "total": 0,
+                "correct": 0
+            }
+
+        self.difficulty_stats[difficulty]["total"] += 1
+
         if answer is None:
             print("Correct answer:", question["answer"])
 
@@ -182,6 +193,7 @@ class Quiz:
         if selected_answer == question["answer"]:
             print("Correct!")
             self.score += 1
+            self.difficulty_stats[difficulty]["correct"] += 1
             is_correct = True
         else:
             print("Wrong!")
@@ -198,6 +210,7 @@ class Quiz:
     def start(self):
         self.score = 0
         self.review = []
+        self.difficulty_stats = {}
 
         selected_questions = self.choose_category()
 
@@ -223,6 +236,7 @@ class Quiz:
             self.check_answer(question, answer)
 
         self.show_result(total_questions)
+        self.show_difficulty_stats()
         self.show_review()
 
     def get_grade(self, percentage):
@@ -251,6 +265,22 @@ class Quiz:
         print(f"Score           : {self.score}/{total_questions}")
         print(f"Percentage      : {percentage:.0f}%")
         print(f"Grade           : {grade}")
+        print("================================")
+
+    def show_difficulty_stats(self):
+        print("\n================================")
+        print("     DIFFICULTY PERFORMANCE")
+        print("================================")
+
+        for difficulty in ["Easy", "Medium", "Hard"]:
+            if difficulty in self.difficulty_stats:
+                stats = self.difficulty_stats[difficulty]
+
+                print(
+                    f"{difficulty:<8}: "
+                    f"{stats['correct']}/{stats['total']}"
+                )
+
         print("================================")
 
     def show_review(self):
