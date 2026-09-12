@@ -2,6 +2,8 @@ import random
 import time
 import msvcrt
 
+from utils import save_result, load_results
+
 
 class Quiz:
     def __init__(self, questions):
@@ -270,6 +272,8 @@ class Quiz:
         self.show_difficulty_stats()
         self.show_category_stats()
         self.show_review()
+        self.save_quiz_result(total_questions)
+        self.show_history()
 
     def get_grade(self, percentage):
         if percentage >= 90:
@@ -377,6 +381,41 @@ class Quiz:
                 print("Result         : Wrong")
 
         print("\n================================")
+
+    def save_quiz_result(self, total_questions):
+        percentage = (self.score / total_questions) * 100
+        grade = self.get_grade(percentage)
+
+        result = {
+            "score": self.score,
+            "total_questions": total_questions,
+            "percentage": round(percentage, 2),
+            "grade": grade
+        }
+
+        save_result("data/results.json", result)
+
+    def show_history(self):
+        results = load_results("data/results.json")
+
+        print("\n================================")
+        print("         QUIZ HISTORY")
+        print("================================")
+
+        if not results:
+            print("No previous quiz attempts found.")
+            print("================================")
+            return
+
+        for i, result in enumerate(results, start=1):
+            print(
+                f"Attempt {i}: "
+                f"{result['score']}/{result['total_questions']} "
+                f"- {result['percentage']:.2f}% "
+                f"- Grade {result['grade']}"
+            )
+
+        print("================================")
 
     def play_again(self):
         while True:
